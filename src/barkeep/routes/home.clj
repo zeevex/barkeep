@@ -34,6 +34,7 @@
 
 (defroutes home-routes
   (GET "/" [] (home-page))
+  (HEAD "/" [] "")
   (GET "/barcode/:value.:format" [value format & options]
        (barcode value format options))
   (GET "/about" [] (about-page)))

@@ -7,11 +7,24 @@
         javax.imageio.ImageIO
         java.awt.image.BufferedImage)
 
-(defn translate-format [format]
-  (BarcodeFormat/valueOf
-   (case format
-     ("c128c" "c128") "CODE_128"
-     format)))
+;; 
+;; See
+;; http://zxing.org/w/docs/javadoc/com/google/zxing/BarcodeFormat.html
+;;
+;;
+(defn translate-format [rawformat]
+  (let [format (.replace rawformat \- \_)]
+    (BarcodeFormat/valueOf   
+     (.toUpperCase (case format
+                     ("c128c" "c128" "c128a" "c128b") "CODE_128"
+                     ("i2of5" "itf") "ITF"
+                     ("c39") "CODE_39"
+                     "ean13" "EAN_13"
+                     "ean8"  "EAN_8"
+                     ("qr" "qrcode") "QR_CODE"
+                     "upca" "UPC_A"
+                     "upce" "UPC_E"
+                     format)))))
 
 (defn make-barcode [value & {:keys [type height width]
                              :or   {type 'c128c height 200 width 400}}]
@@ -30,11 +43,3 @@
   (to-image
    (make-barcode value :type type :height height :width width)
    imageformat))
-
-;; com.google.zxing.client.j2se.MatrixToImageWriter.writeToFile(matrix,"PNG",new File("some/path.png"));
-;; com.google.zxing.client.j2se.MatrixToImageWriter.writeToStream(matrix, "PNG", outputStream);
-;; java.awt.BufferedImage image =
-;;    com.google.zxing.client.j2se.MatrixToImageWriter.toBufferedImage(matrix)
-;;-----
-;; bitMatrix = new Code128Writer().encode("Hello World !!!",BarcodeFormat.CODE_128,width,height,null);
-;; MatrixToImageWriter.writeToStream(bitMatrix, "png", new FileOutputStream(new File("/home/kas/zxing_barcode.png")));

@@ -10,6 +10,7 @@
                  [com.postspectacular/rotor "0.1.0"]
                  [com.taoensso/tower "1.7.1"]
                  [markdown-clj "0.9.26"]
+                 [org.clojure/core.memoize "0.5.5"]
                  [com.google.zxing/core "2.2"]
                  [com.google.zxing/javase "2.2"]]
 

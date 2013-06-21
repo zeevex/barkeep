@@ -23,7 +23,8 @@
         height  (Integer. (:height options))
         width   (Integer. (:width options))]
   {:status  200
-   :headers {"Content-Type" (content-type-for-image format) }
+   :headers {"Content-Type"  (content-type-for-image format)
+             "Cache-Control" "public, max-age=2592000"}
    :body    (java.io.ByteArrayInputStream.
              (make-barcode-image value
                                  :imageformat format

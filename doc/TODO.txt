@@ -1,0 +1,12 @@
+
+- caching
+  - optionally use a memcache or in-core cache for generated images
+
+- debugging
+  - include sw version in header
+
+- deployment
+  - setup well-known DNS name
+
+- tweaking
+  - adjust default image sizes

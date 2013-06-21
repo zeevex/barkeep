@@ -1,4 +1,5 @@
-(ns barkeep.generator)
+(ns barkeep.generator
+  (:require clojure.core.memoize))
 
 (import com.google.zxing.client.j2se.MatrixToImageWriter
         com.google.zxing.common.BitMatrix
@@ -43,3 +44,5 @@
   (to-image
    (make-barcode value :type type :height height :width width)
    imageformat))
+
+(def make-barcode-image-memoized (clojure.core.memoize/lru make-barcode-image))

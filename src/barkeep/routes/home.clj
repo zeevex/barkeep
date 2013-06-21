@@ -1,7 +1,7 @@
 (ns barkeep.routes.home
   (:use compojure.core)
   (:require [barkeep.views.layout :as layout]
-            [barkeep.generator :refer [make-barcode-image]]
+            [barkeep.generator :refer [make-barcode-image make-barcode-image-memoized]]
             [barkeep.util :as util]))
 
 (defn home-page []
@@ -23,9 +23,10 @@
         height  (Integer. (:height options))
         width   (Integer. (:width options))]
   {:status  200
-   :headers {"Content-Type" (content-type-for-image format) }
+   :headers {"Content-Type"  (content-type-for-image format)
+             "Cache-Control" "public, max-age=2592000"}
    :body    (java.io.ByteArrayInputStream.
-             (make-barcode-image value
+             (make-barcode-image-memoized value
                                  :imageformat format
                                  :height height
                                  :width width
@@ -34,6 +35,7 @@
 
 (defroutes home-routes
   (GET "/" [] (home-page))
+  (HEAD "/" [] "")
   (GET "/barcode/:value.:format" [value format & options]
        (barcode value format options))
   (GET "/about" [] (about-page)))
